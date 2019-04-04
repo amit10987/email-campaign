@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class EmailTemplate {
 
-    protected EmailTemplate(){
+    public EmailTemplate(){
 
     }
 

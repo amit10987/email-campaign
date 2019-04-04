@@ -22,7 +22,7 @@
 
     <!-- Trigger the modal with a button -->
     <button type="button" class="btn btn-default btn-lg" id="myBtn"
-            data-toggle="modal" data-target="#myModal">Add
+            data-toggle="modal" data-target="#myModal">Create
     </button>
 
     <!-- Modal -->
@@ -33,25 +33,40 @@
             <div class="modal-content">
                 <div class="modal-header" style="padding: 35px 50px;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h1>Campaign</h1>
+                    <h1>Email Template</h1>
                 </div>
                 <div class="modal-body" style="padding: 40px 50px;">
-                    <form role="form" action="/add" method="post">
-                        <input type="hidden" name="car.id" id="carId"/>
+                    <form role="form" action="/emailTemplate/create" method="post" th:object="${emailTemplate}">
+                        <input type="hidden" name="id" id="emailId"/>
                         <div class="form-group">
-                            <label for="camname"> Name</label>
-                            <input type="text" class="form-control" id="camname" placeholder="Enter campaign name"
-                                   name="campaign.name"/>
+                            <label for="emailNameId"> Name</label>
+                            <input type="text" class="form-control" id="emailNameId"
+                                   placeholder="Enter Template name ..."
+                                   name="name"/>
                         </div>
                         <div class="form-group">
-                            <label for="model">Description</label>
-                            <input type="text" name="car.model" class="form-control" id="model"
-                                   placeholder="Enter campaign description"/>
+                            <label for="emailSubjectId">Subject</label>
+                            <input type="text" name="subject" class="form-control" id="emailSubjectId"
+                                   placeholder="Enter email subject ..."/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailBodyId">Body</label>
+                            <input type="text" name="body" class="form-control" id="emailBodyId"
+                                   placeholder="Enter email body ..."/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="selectCampaignId">Select Campaign</label>
+                            <select class="form-control" id="selectCampaignId">
+                                <option th:each="campaign : ${campaigns}">[[${campaign.name}]]</option>
+                            </select>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-block"
-                                id="addCar">Add
+                                id="createEmailId">Create
                         </button>
+
                     </form>
                 </div>
             </div>
@@ -60,23 +75,26 @@
 </div>
 
 <div class="container">
-    <h2>Campaigns</h2>
+    <h2>Email Templates</h2>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Name</th>
-            <th>Description</th>
+            <th>Subject</th>
+            <th>Body</th>
+            <th>Campaign</th>
             <th/>
         </tr>
         </thead>
 
-
         <tbody>
-        <tr th:each="campaign : ${campaigns}">
-            <td th:text="${campaign.name}" class="campname"></td>
-            <td th:text="${campaign.description}" class="campdesc"></td>
+        <tr th:each="emailTemplate : ${emailTemplates}">
+            <td th:text="${emailTemplate.name}" class="emailname"></td>
+            <td th:text="${emailTemplate.subject}" class="emailsubject"></td>
+            <td th:text="${emailTemplate.body}" class="emailbody"></td>
+            <td th:text="${emailTemplate.campaign}" class="emailcampaign"></td>
             <td align="right">
-                <p th:id="${campaign.id}">
+                <p th:id="${emailTemplate.id}">
                     <span class="glyphicon glyphicon-pencil btnEdit"
                           onmouseover="this.style.cursor='pointer'">
                     </span> <span
@@ -98,31 +116,34 @@
             $(".btnEdit").bind(
                 "click",
                 function () {
-                    $("#brand").val(
+                    $("#emailNameId").val(
                         $(this).parent().parent().parent()
-                            .find(".brand").html());
-                    $("#model").val(
+                            .find(".emailname").html());
+                    $("#emailSubjectId").val(
                         $(this).parent().parent().parent()
-                            .find(".model").html());
-                    $("#carId").val($(this).parent().attr("id"));
-                    $("#addCar").text("Edit");
+                            .find(".emailsubject").html());
+                    $("#emailBodyId").val(
+                        $(this).parent().parent().parent()
+                            .find(".emailbody").html());
+                    $("#emailId").val($(this).parent().attr("id"));
+                    console.log($(this));
+                    $("#createEmailId").text("Update");
                     $("#myModal").modal();
                 });
 
             $(".btnDelete").bind("click", function () {
 
                 $.ajax({
-                    url: '/deleteCar',
+                    url: '/emailTemplate/delete',
                     type: 'POST',
                     data: {
-                        "car.id": $(this).parent().attr("id")
+                        "email.id": $(this).parent().attr("id")
                     },
                     success: function (response) {
                         location.reload();
                     }
                 });
             });
-
         });
 </script>
 
