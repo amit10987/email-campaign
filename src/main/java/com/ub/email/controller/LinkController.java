@@ -1,4 +1,4 @@
-package com.ub.email.boot;
+package com.ub.email.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

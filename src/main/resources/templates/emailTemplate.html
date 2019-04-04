@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Vehicle Manager</title>
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+          rel="stylesheet" media="screen"/>
+</head>
+<body>
+
+
+<div th:replace="header :: header"></div>
+
+
+<div class="container" style="margin-top: 100px">
+
+
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-default btn-lg" id="myBtn"
+            data-toggle="modal" data-target="#myModal">Add
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h1>Campaign</h1>
+                </div>
+                <div class="modal-body" style="padding: 40px 50px;">
+                    <form role="form" action="/add" method="post">
+                        <input type="hidden" name="car.id" id="carId"/>
+                        <div class="form-group">
+                            <label for="camname"> Name</label>
+                            <input type="text" class="form-control" id="camname" placeholder="Enter campaign name"
+                                   name="campaign.name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="model">Description</label>
+                            <input type="text" name="car.model" class="form-control" id="model"
+                                   placeholder="Enter campaign description"/>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block"
+                                id="addCar">Add
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Campaigns</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th/>
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <tr th:each="campaign : ${campaigns}">
+            <td th:text="${campaign.name}" class="campname"></td>
+            <td th:text="${campaign.description}" class="campdesc"></td>
+            <td align="right">
+                <p th:id="${campaign.id}">
+                    <span class="glyphicon glyphicon-pencil btnEdit"
+                          onmouseover="this.style.cursor='pointer'">
+                    </span> <span
+                        onmouseover="this.style.cursor='pointer'"
+                        class="glyphicon  glyphicon-trash btnDelete"></span>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(
+        function () {
+
+            $(".btnEdit").bind(
+                "click",
+                function () {
+                    $("#brand").val(
+                        $(this).parent().parent().parent()
+                            .find(".brand").html());
+                    $("#model").val(
+                        $(this).parent().parent().parent()
+                            .find(".model").html());
+                    $("#carId").val($(this).parent().attr("id"));
+                    $("#addCar").text("Edit");
+                    $("#myModal").modal();
+                });
+
+            $(".btnDelete").bind("click", function () {
+
+                $.ajax({
+                    url: '/deleteCar',
+                    type: 'POST',
+                    data: {
+                        "car.id": $(this).parent().attr("id")
+                    },
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
+        });
+</script>
+
+</body>
+</html>
