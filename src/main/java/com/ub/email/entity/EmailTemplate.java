@@ -15,8 +15,17 @@ public class EmailTemplate {
     private String name;
     private String subject;
     private String body;
+    private String campaignName;
     @ManyToOne
     private Campaign campaign;
+
+    public String getCampaignName() {
+        return campaignName;
+    }
+
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
+    }
 
     public Long getId() {
         return id;

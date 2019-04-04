@@ -58,8 +58,8 @@
 
                         <div class="form-group">
                             <label for="selectCampaignId">Select Campaign</label>
-                            <select class="form-control" id="selectCampaignId">
-                                <option th:each="campaign : ${campaigns}">[[${campaign.name}]]</option>
+                            <select class="form-control" id="selectCampaignId" name="campaignName">
+                                <option th:each="campaign : ${campaigns}" th:value="${campaign.name}">[[${campaign.name}]]</option>
                             </select>
                         </div>
 
@@ -84,6 +84,7 @@
             <th>Body</th>
             <th>Campaign</th>
             <th/>
+            <th/>
         </tr>
         </thead>
 
@@ -92,14 +93,18 @@
             <td th:text="${emailTemplate.name}" class="emailname"></td>
             <td th:text="${emailTemplate.subject}" class="emailsubject"></td>
             <td th:text="${emailTemplate.body}" class="emailbody"></td>
-            <td th:text="${emailTemplate.campaign}" class="emailcampaign"></td>
+            <td th:text="${emailTemplate.campaignName}" class="emailcampaign"></td>
+            <td><a href="#" class="btn btn-info btn-sm">
+                <span class="glyphicon glyphicon-envelope"></span> Send Email TO All User
+            </a></td>
             <td align="right">
                 <p th:id="${emailTemplate.id}">
                     <span class="glyphicon glyphicon-pencil btnEdit"
                           onmouseover="this.style.cursor='pointer'">
-                    </span> <span
-                        onmouseover="this.style.cursor='pointer'"
-                        class="glyphicon  glyphicon-trash btnDelete"></span>
+                    </span>
+                    <span onmouseover="this.style.cursor='pointer'"
+                        class="glyphicon  glyphicon-trash btnDelete">
+                    </span>
                 </p>
             </td>
         </tr>
@@ -125,8 +130,10 @@
                     $("#emailBodyId").val(
                         $(this).parent().parent().parent()
                             .find(".emailbody").html());
+                    $("#selectCampaignId").val(
+                        $(this).parent().parent().parent()
+                            .find(".emailcampaign").html());
                     $("#emailId").val($(this).parent().attr("id"));
-                    console.log($(this));
                     $("#createEmailId").text("Update");
                     $("#myModal").modal();
                 });
