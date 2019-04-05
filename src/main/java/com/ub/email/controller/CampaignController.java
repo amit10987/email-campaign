@@ -19,7 +19,7 @@ public class CampaignController {
     @Autowired
     CampaignRepository repository;
 
-    @GetMapping("/")
+    @GetMapping("/campaign")
     public String homePage(Model model)   {
         List<Campaign> campaigns = (List<Campaign>) repository.findAll();
         model.addAttribute("campaigns", campaigns);
@@ -29,7 +29,7 @@ public class CampaignController {
     @PostMapping("/campaign/create")
     public String create(@ModelAttribute Campaign campaign, Model model) {
         repository.save(campaign);
-        return "redirect:/";
+        return "redirect:/campaign";
     }
 
     @PostMapping("/campaign/delete")
@@ -38,6 +38,6 @@ public class CampaignController {
         Campaign campaign = new Campaign();
         campaign.setId(id);
         repository.delete(campaign);
-        return "redirect:/";
+        return "redirect:/campaign";
     }
 }

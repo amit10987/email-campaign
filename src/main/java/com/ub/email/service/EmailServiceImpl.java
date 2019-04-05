@@ -76,21 +76,6 @@ public class EmailServiceImpl implements EmailService {
         return users.stream().map(prepareMimeMailMessage(emailTemplate, uuid)).collect(Collectors.toList());
     }
 
-    /**
-     * @param emailTemplate
-     * @return
-     */
-    private Function<User, SimpleMailMessage> prepareMailMessage(EmailTemplate emailTemplate) {
-        return user -> {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("amit@localhost");
-            simpleMailMessage.setTo(user.getEmailId());
-            simpleMailMessage.setSubject(emailTemplate.getSubject());
-            simpleMailMessage.setText(emailTemplate.getBody());
-            return simpleMailMessage;
-        };
-    }
-
     private Function<User, MimeMessage> prepareMimeMailMessage(EmailTemplate emailTemplate, String uuid) {
         return user -> {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -100,7 +85,7 @@ public class EmailServiceImpl implements EmailService {
                 helper.setTo(user.getEmailId());
                 helper.setSubject(emailTemplate.getSubject());
                 String hrefLink = "<a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
-                helper.setText(hrefLink, true);
+                helper.setText(emailTemplate.getBody(), hrefLink);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
