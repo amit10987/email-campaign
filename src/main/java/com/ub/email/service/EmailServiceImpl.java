@@ -37,7 +37,6 @@ public class EmailServiceImpl implements EmailService {
     public EmailStats sendEmail(Long templateId) {
         EmailTemplate template = emailTemplateRepository.findById(templateId).orElse(getDefaultTemplate());
         UUID uuid = UUID.randomUUID();
-        int uuidHash = uuid.hashCode();
         List<MimeMessage> mimeMessages = getSimpleMailMessage(template, uuid.toString());
         EmailStats stats = sendMailAndGetEmailStats(mimeMessages);
         stats.setCampaignName(template.getCampaignName());
@@ -84,8 +83,8 @@ public class EmailServiceImpl implements EmailService {
                 helper.setFrom("amit@localhost");
                 helper.setTo(user.getEmailId());
                 helper.setSubject(emailTemplate.getSubject());
-                String hrefLink = "<a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
-                helper.setText(emailTemplate.getBody(), hrefLink);
+                String hrefLink = emailTemplate.getBody() + "<br/><a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
+                helper.setText(hrefLink, true);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
