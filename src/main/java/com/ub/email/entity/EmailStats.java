@@ -3,7 +3,6 @@ package com.ub.email.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class EmailStats {
@@ -16,12 +15,21 @@ public class EmailStats {
     @GeneratedValue
     private Long id;
     private Long totalDelivered = 0l;
-    private Long totalOpened =0l;
+    private Long totalOpened = 0l;
     private Long totalClicked = 0l;
     private Long totalSent = 0l;
     private Long totalFailed = 0l;
     private String campaignName;
     private String templateName;
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getCampaignName() {
         return campaignName;
@@ -88,6 +96,10 @@ public class EmailStats {
     }
 
     public void incrementTotalFailed() {
-            totalFailed++;
+        totalFailed++;
+    }
+
+    public void incrementTotalClicked() {
+        totalClicked++;
     }
 }

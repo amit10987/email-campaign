@@ -8,11 +8,13 @@ import com.ub.email.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,23 +36,26 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public EmailStats sendEmail(Long templateId) {
         EmailTemplate template = emailTemplateRepository.findById(templateId).orElse(getDefaultTemplate());
-        List<SimpleMailMessage> simpleMailMessagess = getSimpleMailMessage(template);
-        EmailStats stats = sendMailAndGetEmailStats(simpleMailMessagess);
+        UUID uuid = UUID.randomUUID();
+        int uuidHash = uuid.hashCode();
+        List<MimeMessage> mimeMessages = getSimpleMailMessage(template, uuid.toString());
+        EmailStats stats = sendMailAndGetEmailStats(mimeMessages);
         stats.setCampaignName(template.getCampaignName());
         stats.setTemplateName(template.getName());
+        stats.setUuid(uuid.toString());
         emailStatsService.save(stats);
         return stats;
     }
 
-    private EmailStats sendMailAndGetEmailStats(List<SimpleMailMessage> simpleMailMessagess) {
+    private EmailStats sendMailAndGetEmailStats(List<MimeMessage> mimeMessages) {
         EmailStats stats = new EmailStats();
-        stats.setTotalSent(new Long(simpleMailMessagess.size()));
-        for (SimpleMailMessage msg : simpleMailMessagess) {
+        stats.setTotalSent(new Long(mimeMessages.size()));
+        for (MimeMessage msg : mimeMessages) {
             try {
                 javaMailSender.send(msg);
             } catch (Exception ex) {
                 stats.incrementTotalFailed();
-                System.out.println("email sending failed for user" + msg.getTo());
+                System.out.println("email sending failed for user" + msg);
             }
         }
         Long totalDelivered = stats.getTotalSent() - stats.getTotalFailed();
@@ -66,9 +71,9 @@ public class EmailServiceImpl implements EmailService {
         return emailTemplate;
     }
 
-    private List<SimpleMailMessage> getSimpleMailMessage(EmailTemplate emailTemplate) {
+    private List<MimeMessage> getSimpleMailMessage(EmailTemplate emailTemplate, String uuid) {
         List<User> users = (List<User>) userRepository.findAll();
-        return users.stream().map(prepareMailMessage(emailTemplate)).collect(Collectors.toList());
+        return users.stream().map(prepareMimeMailMessage(emailTemplate, uuid)).collect(Collectors.toList());
     }
 
     /**
@@ -83,6 +88,23 @@ public class EmailServiceImpl implements EmailService {
             simpleMailMessage.setSubject(emailTemplate.getSubject());
             simpleMailMessage.setText(emailTemplate.getBody());
             return simpleMailMessage;
+        };
+    }
+
+    private Function<User, MimeMessage> prepareMimeMailMessage(EmailTemplate emailTemplate, String uuid) {
+        return user -> {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            try {
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+                helper.setFrom("amit@localhost");
+                helper.setTo(user.getEmailId());
+                helper.setSubject(emailTemplate.getSubject());
+                String hrefLink = "<a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
+                helper.setText(hrefLink, true);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+            return mimeMessage;
         };
     }
 }

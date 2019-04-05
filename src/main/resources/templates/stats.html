@@ -10,6 +10,10 @@
     <!-- Bootstrap -->
     <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
           rel="stylesheet" media="screen"/>
+
+    <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+    <script src="/static/app.js"></script>
 </head>
 <body>
 
@@ -37,7 +41,7 @@
 
 
         <tbody>
-        <tr  th:each="stat : ${stats}">
+        <tr  th:each="stat : ${stats}" th:id="${stat.uuid}">
             <td th:text="${stat.campaignName}" class="camName"></td>
             <td th:text="${stat.templateName}" class="tempName"></td>
             <td th:text="${stat.totalSent}" class="totalSent"></td>
@@ -55,6 +59,8 @@
 <script>
     $(document).ready(
         function () {
+
+         connect();
 
             $(".btnEdit").bind(
                 "click",
