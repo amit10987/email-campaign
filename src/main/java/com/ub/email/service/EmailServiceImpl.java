@@ -83,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
                 helper.setFrom("amit@localhost");
                 helper.setTo(user.getEmailId());
                 helper.setSubject(emailTemplate.getSubject());
-                String hrefLink = emailTemplate.getBody() + "<br/><a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
+                String hrefLink = emailTemplate.getBody() + "<br/><br/><a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
                 helper.setText(hrefLink, true);
             } catch (MessagingException e) {
                 e.printStackTrace();

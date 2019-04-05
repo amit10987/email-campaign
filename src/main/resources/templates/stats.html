@@ -24,39 +24,38 @@
 <div class="container" style="margin-top: 100px">
 
 
+    <div class="container">
+        <h2>Stats</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Campaign Name</th>
+                <th>Template Name</th>
+                <th>Total Sent</th>
+                <th>Total Delivered</th>
+                <th>Total Opened</th>
+                <th>Total Clicked</th>
+            </tr>
+            </thead>
 
-<div class="container">
-    <h2>Stats</h2>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Campaign Name</th>
-            <th>Template Name</th>
-            <th>Total Sent</th>
-            <th>Total Delivered</th>
-            <th>Total Opened</th>
-            <th>Total Clicked</th>
-        </tr>
-        </thead>
 
+            <tbody>
+            <tr th:each="stat : ${stats}" th:id="${stat.uuid}">
+                <td th:text="${stat.campaignName}" class="camName"></td>
+                <td th:text="${stat.templateName}" class="tempName"></td>
+                <td th:text="${stat.totalSent}" class="totalSent"></td>
+                <td th:text="${stat.totalDelivered}" class="totalDelivered"></td>
+                <td th:text="${stat.totalOpened}" class="totalOpened"></td>
+                <td th:text="${stat.totalClicked}" class="totalClicked"></td>
 
-        <tbody>
-        <tr  th:each="stat : ${stats}" th:id="${stat.uuid}">
-            <td th:text="${stat.campaignName}" class="camName"></td>
-            <td th:text="${stat.templateName}" class="tempName"></td>
-            <td th:text="${stat.totalSent}" class="totalSent"></td>
-            <td th:text="${stat.totalDelivered}" class="totalDelivered"></td>
-            <td th:text="${stat.totalOpened}" class="totalOpened"></td>
-            <td th:text="${stat.totalClicked}" class="totalClicked"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
-<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-<script>
+    <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <script>
     $(document).ready(
         function () {
 
@@ -91,7 +90,8 @@
             });
 
         });
-</script>
+
+    </script>
 
 </body>
 </html>
