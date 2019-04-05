@@ -24,6 +24,9 @@
                 <li th:classappend="${module == 'users' ? 'active' : ''}">
                     <a href="#" th:href="@{/user}">users</a>
                 </li>
+                <li th:classappend="${module == 'stats' ? 'active' : ''}">
+                    <a href="#" th:href="@{/stat}">Stats</a>
+                </li>
             </ul>
         </div>
     </div>

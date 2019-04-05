@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Email Campaign</title>
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+          rel="stylesheet" media="screen"/>
+</head>
+<body>
+
+
+<div th:replace="header :: header"></div>
+
+
+<div class="container" style="margin-top: 100px">
+
+
+
+<div class="container">
+    <h2>Stats</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Campaign Name</th>
+            <th>Template Name</th>
+            <th>Total Sent</th>
+            <th>Total Delivered</th>
+            <th>Total Opened</th>
+            <th>Total Clicked</th>
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <tr  th:each="stat : ${stats}">
+            <td th:text="${stat.campaignName}" class="camName"></td>
+            <td th:text="${stat.templateName}" class="tempName"></td>
+            <td th:text="${stat.totalSent}" class="totalSent"></td>
+            <td th:text="${stat.totalDelivered}" class="totalDelivered"></td>
+            <td th:text="${stat.totalOpened}" class="totalOpened"></td>
+            <td th:text="${stat.totalClicked}" class="totalClicked"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(
+        function () {
+
+            $(".btnEdit").bind(
+                "click",
+                function () {
+                    $("#campaignNameId").val(
+                        $(this).parent().parent().parent()
+                            .find(".campname").html());
+                    $("#campaignDescId").val(
+                        $(this).parent().parent().parent()
+                            .find(".campdesc").html());
+                    $("#campaignId").val($(this).parent().attr("id"));
+                    $("#createCampaignId").text("Update");
+                    $("#myModal").modal();
+                });
+
+            $(".btnDelete").bind("click", function () {
+
+                $.ajax({
+                    url: '/campaign/delete',
+                    type: 'POST',
+                    data: {
+                        "campaign.id": $(this).parent().attr("id")
+                    },
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
+        });
+</script>
+
+</body>
+</html>

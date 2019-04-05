@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <title>Vehicle Manager</title>
+    <title>Email Campaign</title>
     <!-- Bootstrap -->
     <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
           rel="stylesheet" media="screen"/>
@@ -94,7 +94,7 @@
             <td th:text="${emailTemplate.subject}" class="emailsubject"></td>
             <td th:text="${emailTemplate.body}" class="emailbody"></td>
             <td th:text="${emailTemplate.campaignName}" class="emailcampaign"></td>
-            <td><a href="#" class="btn btn-info btn-sm">
+            <td><a href="#" class="btn btn-info btn-sm btn-sendEmail" th:id="${emailTemplate.id}">
                 <span class="glyphicon glyphicon-envelope"></span> Send Email TO All User
             </a></td>
             <td align="right">
@@ -136,6 +136,20 @@
                     $("#emailId").val($(this).parent().attr("id"));
                     $("#createEmailId").text("Update");
                     $("#myModal").modal();
+                });
+
+                $(".btn-sendEmail").bind("click", function(){
+                $.ajax({
+                    url: '/email/send',
+                    type: 'POST',
+                    data: {
+                        "emailTemplate.id": $(this).attr("id")
+                    },
+                    success: function (response) {
+                     alert("email successfully processed");
+                    }
+                });
+
                 });
 
             $(".btnDelete").bind("click", function () {

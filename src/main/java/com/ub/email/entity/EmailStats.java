@@ -8,25 +8,51 @@ import javax.persistence.OneToOne;
 @Entity
 public class EmailStats {
 
-    protected EmailStats(){
+    public EmailStats() {
 
     }
 
     @Id
     @GeneratedValue
     private Long id;
-    private Long totalDelivered;
-    private Long totalOpened;
-    private Long totalClicked;
-    @OneToOne
-    private User user;
+    private Long totalDelivered = 0l;
+    private Long totalOpened =0l;
+    private Long totalClicked = 0l;
+    private Long totalSent = 0l;
+    private Long totalFailed = 0l;
+    private String campaignName;
+    private String templateName;
 
-    public User getUser() {
-        return user;
+    public String getCampaignName() {
+        return campaignName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+    public Long getTotalFailed() {
+        return totalFailed;
+    }
+
+    public void setTotalFailed(Long totalFailed) {
+        this.totalFailed = totalFailed;
+    }
+
+    public Long getTotalSent() {
+        return totalSent;
+    }
+
+    public void setTotalSent(Long totalSent) {
+        this.totalSent = totalSent;
     }
 
     public Long getId() {
@@ -59,5 +85,9 @@ public class EmailStats {
 
     public void setTotalClicked(Long totalClicked) {
         this.totalClicked = totalClicked;
+    }
+
+    public void incrementTotalFailed() {
+            totalFailed++;
     }
 }
