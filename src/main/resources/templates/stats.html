@@ -11,9 +11,11 @@
     <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
           rel="stylesheet" media="screen"/>
 
+    <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
     <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
-    <script src="/static/app.js"></script>
+    <script src="/static/statswebsocket.js"></script>
 </head>
 <body>
 
@@ -52,46 +54,12 @@
             </tbody>
         </table>
     </div>
-
-    <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
     <script>
     $(document).ready(
         function () {
-
          connect();
-
-            $(".btnEdit").bind(
-                "click",
-                function () {
-                    $("#campaignNameId").val(
-                        $(this).parent().parent().parent()
-                            .find(".campname").html());
-                    $("#campaignDescId").val(
-                        $(this).parent().parent().parent()
-                            .find(".campdesc").html());
-                    $("#campaignId").val($(this).parent().attr("id"));
-                    $("#createCampaignId").text("Update");
-                    $("#myModal").modal();
-                });
-
-            $(".btnDelete").bind("click", function () {
-
-                $.ajax({
-                    url: '/campaign/delete',
-                    type: 'POST',
-                    data: {
-                        "campaign.id": $(this).parent().attr("id")
-                    },
-                    success: function (response) {
-                        location.reload();
-                    }
-                });
-            });
-
         });
 
     </script>
-
 </body>
 </html>

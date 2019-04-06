@@ -2,13 +2,13 @@ package com.ub.email.controller;
 
 import com.ub.email.entity.EmailStats;
 import com.ub.email.repository.EmailStatsRepository;
+import com.ub.email.service.StatsService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,7 +22,7 @@ public class LinkController {
     EmailStatsRepository emailStatsRepository;
 
     @Autowired
-    StatsController statsController;
+    StatsService statsService;
 
     @ResponseBody
     @RequestMapping(value = "/offer", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
@@ -36,6 +36,6 @@ public class LinkController {
         EmailStats stats = emailStatsRepository.findByUuid(uuid);
         stats.incrementTotalClicked();
         emailStatsRepository.save(stats);
-        statsController.pushStats(uuid);
+        statsService.pushStats(uuid);
     }
 }

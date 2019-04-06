@@ -8,10 +8,6 @@ function connect() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/stats', function (response) {
             stat = JSON.parse(response.body);
-            tr = document.getElementById(stat.uuid);
-            tds = tr.getElementsByTagName("td");
-            tds[4].innerText = stat.totalOpened;
-            tds[5].innerText = stat.totalClicked;
         });
     });
 }
@@ -24,11 +20,8 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+function askForStats() {
+    stompClient.send("/app/stats", {}, JSON.stringify({'name': $("#name").val()}));
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
-}
 

@@ -16,7 +16,7 @@
 
     <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
-    <script src="/static/app.js"></script>
+    <script src="/static/homewebsocket.js"></script>
 
     <script src="/static/d3.min.js"></script>
     <link rel="stylesheet" href="/static/bar.chart.min.css"/>
@@ -34,6 +34,13 @@
         <button type="button" class="btn btn-info" id="loadDataId">Load Data</button>
     </div>
 
+    <table>
+        <thead>
+            <th>Campaign Name</th>
+            <th>Template Name</th>
+
+        </thead>
+    </table>
     <div id="chtAnimatedBarChart" class="example"></div>
 
 
@@ -69,10 +76,9 @@
     <script>
     $(document).ready(
         function () {
+        connect();
 
-         connect();
-
-             $("#loadDataId").bind("click", function(){
+         $("#loadDataId").bind("click", function(){
                   $.ajax({
                     url: '/loadData',
                     type: 'POST',
@@ -82,49 +88,19 @@
                 });
              });
 
-            $(".btnEdit").bind(
-                "click",
-                function () {
-                    $("#campaignNameId").val(
-                        $(this).parent().parent().parent()
-                            .find(".campname").html());
-                    $("#campaignDescId").val(
-                        $(this).parent().parent().parent()
-                            .find(".campdesc").html());
-                    $("#campaignId").val($(this).parent().attr("id"));
-                    $("#createCampaignId").text("Update");
-                    $("#myModal").modal();
-                });
-
-            $(".btnDelete").bind("click", function () {
-
-                $.ajax({
-                    url: '/campaign/delete',
-                    type: 'POST',
-                    data: {
-                        "campaign.id": $(this).parent().attr("id")
-                    },
-                    success: function (response) {
-                        location.reload();
-                    }
-                });
-            });
 
         const myData = [
-         { "group_name": "Google", "name": "Jan", "value": 38367 },
-         { "group_name": "Apple", "name": "Jan", "value": 28827 },
-         { "group_name": "Microsoft", "name": "Jan", "value": 38674 },
-         { "group_name": "Samsung", "name": "Jan", "value": 40110 }
-        ]
+         { "group_name": "Sent", "name": "Jan", "value": 38367 },
+         { "group_name": "Delivered", "name": "Jan", "value": 28827 },
+         { "group_name": "Opened", "name": "Jan", "value": 38674 },
+         { "group_name": "Clicked", "name": "Jan", "value": 40110 }
+        ];
 
-
-			$('#chtAnimatedBarChart').animatedBarChart({
-				data: myData
-			});
-
+        $('#chtAnimatedBarChart').animatedBarChart({
+            data: myData
         });
 
-
+     });
 
     </script>
 
