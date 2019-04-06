@@ -37,5 +37,6 @@ public class LinkController {
         stats.incrementTotalClicked();
         emailStatsRepository.save(stats);
         statsService.pushStats(uuid);
+        statsService.pushAllStats();
     }
 }

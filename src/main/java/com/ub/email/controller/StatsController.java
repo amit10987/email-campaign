@@ -28,7 +28,7 @@ public class StatsController {
     }
 
     @MessageMapping("/stats")
-    public void pushStats(String uuid) {
-        statsService.pushStats(uuid);
+    public void pushStats() {
+        statsService.pushAllStats();
     }
 }
