@@ -3,11 +3,12 @@ $(function () {
     var stompClient = null;
 
      $("#loadDataId").on("click", function(){
+        $("#loader").show();
           $.ajax({
               url: '/loadData',
               type: 'POST',
               success: function (response) {
-                  location.reload();
+                  $("#loader").hide();
               }
           });
      });

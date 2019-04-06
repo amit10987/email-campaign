@@ -10,6 +10,10 @@
     <!-- Bootstrap -->
     <link href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
           rel="stylesheet" media="screen"/>
+
+
+    <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -110,10 +114,14 @@
         </tr>
         </tbody>
     </table>
+
+
 </div>
 
-<script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
-<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<div id="loader" style="position: fixed; background: rgba(0,0,0,.5); width: 100%;height: 100%;top: 0; left: 0;display:none;">
+    <div style="transform: translate(-50%,-50%);top: 50%;left: 50%; color: white; position: absolute;">Loading ...</div>
+</div>
+
 <script>
     $(document).ready(
         function () {
@@ -139,6 +147,7 @@
                 });
 
                 $(".btn-sendEmail").bind("click", function(){
+                 $("#loader").show();
                 $.ajax({
                     url: '/email/send',
                     type: 'POST',
@@ -146,7 +155,7 @@
                         "emailTemplate.id": $(this).attr("id")
                     },
                     success: function (response) {
-                     alert("email successfully processed");
+                      $("#loader").hide();
                     }
                 });
 
