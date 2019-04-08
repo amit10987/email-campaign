@@ -5,6 +5,8 @@ import com.ub.email.entity.EmailTemplate;
 import com.ub.email.entity.User;
 import com.ub.email.repository.EmailTemplateRepository;
 import com.ub.email.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Autowired
     EmailTemplateRepository emailTemplateRepository;
@@ -53,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
                 javaMailSender.send(msg);
             } catch (Exception ex) {
                 stats.incrementTotalFailed();
-                System.out.println("email sending failed for user" + msg);
+                logger.error("email sending failed for user" + msg);
             }
         }
         Long totalDelivered = stats.getTotalSent() - stats.getTotalFailed();
@@ -85,7 +89,7 @@ public class EmailServiceImpl implements EmailService {
                 String mailBody = prepareMailBody(emailTemplate, uuid);
                 helper.setText(mailBody, true);
             } catch (MessagingException e) {
-                System.out.println("Message Exception");
+                logger.error("Message Exception");
             }
             return mimeMessage;
         };
