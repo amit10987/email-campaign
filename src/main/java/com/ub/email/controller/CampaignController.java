@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Handle crud operation for Campaign page
+ */
 @Controller
 public class CampaignController {
 

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+/**
+ * Controller for home page
+ */
 @Controller
 public class HomeController {
 
@@ -20,6 +23,12 @@ public class HomeController {
     @Autowired
     EmailStatsRepository emailStatsRepository;
 
+    /**
+     * return home page for email campaign application
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/")
     public String home(Model model) {
         List<EmailStats> emailStats = (List<EmailStats>) emailStatsRepository.findAll();
@@ -27,9 +36,25 @@ public class HomeController {
         return "home";
     }
 
+    /**
+     * Load data into application
+     *
+     * @return home
+     */
     @PostMapping("/loadData")
     public String loadData() {
         loadDataService.loadData();
+        return "home";
+    }
+
+    /**
+     * delete application data
+     *
+     * @return home
+     */
+    @PostMapping("/deleteData")
+    public String deleteData() {
+        loadDataService.deleteData();
         return "home";
     }
 }

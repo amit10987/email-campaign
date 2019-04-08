@@ -32,14 +32,19 @@ public class LoadDataServiceImpl implements LoadDataService {
     @Override
     public void loadData() {
         cleanData();
-        populateCampain();
+        populateCampaign();
         populateEmailTemplate();
         populateUser();
     }
 
+    @Override
+    public void deleteData() {
+        cleanData();
+    }
+
     private void populateUser() {
         List<User> users = new ArrayList<>();
-        IntStream.rangeClosed(1,50).forEach(x -> {
+        IntStream.rangeClosed(1,25).forEach(x -> {
             String emailId = "user" + x + "@urbanbuz.com";
             String firstName = "user" + x;
             String lastName = "ub";
@@ -48,6 +53,14 @@ public class LoadDataServiceImpl implements LoadDataService {
         userRepository.saveAll(users);
     }
 
+    /**
+     * create user
+     *
+     * @param emailId
+     * @param firstName
+     * @param lastName
+     * @return
+     */
     private User getUser(String emailId, String firstName, String lastName) {
         User user = new User();
         user.setEmailId(emailId);
@@ -56,6 +69,9 @@ public class LoadDataServiceImpl implements LoadDataService {
         return user;
     }
 
+    /**
+     * Populate Email Template
+     */
     private void populateEmailTemplate() {
         List<EmailTemplate> emailTemplates = new ArrayList<>();
         emailTemplates.add(getEmailTemplate("FoodyFriday", "Foody Friday", "50% discount on every item..", "Campaign0001"));
@@ -66,6 +82,15 @@ public class LoadDataServiceImpl implements LoadDataService {
         emailTemplateRepository.saveAll(emailTemplates);
     }
 
+    /**
+     * crate Email Template
+     *
+     * @param name
+     * @param subject
+     * @param body
+     * @param campaignName
+     * @return
+     */
     private EmailTemplate getEmailTemplate(String name, String subject, String body, String campaignName) {
         EmailTemplate emailTemplate = new EmailTemplate();
         emailTemplate.setName(name);
@@ -75,11 +100,21 @@ public class LoadDataServiceImpl implements LoadDataService {
         return emailTemplate;
     }
 
-    private void populateCampain() {
+    /**
+     * save campaign data
+     */
+    private void populateCampaign() {
         campaignRepository.save(getCampaign("Campaign0001", "Advertisement for restaurant"));
         campaignRepository.save(getCampaign("Campaign0002", "Advertisement for online shopping"));
     }
 
+    /**
+     * create campaign from name and description
+     *
+     * @param name
+     * @param desc
+     * @return
+     */
     private Campaign getCampaign(String name, String desc){
         Campaign campaign = new Campaign();
         campaign.setName(name);
@@ -87,6 +122,9 @@ public class LoadDataServiceImpl implements LoadDataService {
         return campaign;
     }
 
+    /**
+     * delete data from all the repository
+     */
     private void cleanData() {
         campaignRepository.deleteAll();
         emailTemplateRepository.deleteAll();

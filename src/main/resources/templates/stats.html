@@ -37,6 +37,7 @@
                 <th>Total Delivered</th>
                 <th>Total Opened</th>
                 <th>Total Clicked</th>
+                <th>Total Failed</th>
             </tr>
             </thead>
 
@@ -49,7 +50,7 @@
                 <td th:text="${stat.totalDelivered}" class="totalDelivered"></td>
                 <td th:text="${stat.totalOpened}" class="totalOpened"></td>
                 <td th:text="${stat.totalClicked}" class="totalClicked"></td>
-
+                <td th:text="${stat.totalFailed}" class="totalFailed"></td>
             </tr>
             </tbody>
         </table>

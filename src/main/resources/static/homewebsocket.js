@@ -13,12 +13,23 @@ $(function () {
           });
      });
 
+      $("#deleteDataId").on("click", function(){
+             $("#loader").show();
+               $.ajax({
+                   url: '/deleteData',
+                   type: 'POST',
+                   success: function (response) {
+                       $("#loader").hide();
+                   }
+               });
+          });
+
     var graphColumns = [];
     function updateGraph(templateList) {
         const data = [];
 
         templateList.forEach(function (template) {
-             const categories = ['totalClicked', 'totalDelivered', 'totalFailed', 'totalOpened'];
+             const categories = ['totalSent', 'totalDelivered', 'totalFailed', 'totalClicked', 'totalOpened'];
              categories.forEach(function (category) {
                  var existingData = data.find(function(e){
                      return e.group_name === `${template.campaignName}:${template.templateName}` && e.name === category;

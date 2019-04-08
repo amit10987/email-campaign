@@ -79,13 +79,13 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             try {
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-                helper.setFrom("amit@localhost");
+                //helper.setFrom("amit@localhost");
                 helper.setTo(user.getEmailId());
                 helper.setSubject(emailTemplate.getSubject());
                 String mailBody = prepareMailBody(emailTemplate, uuid);
                 helper.setText(mailBody, true);
             } catch (MessagingException e) {
-                e.printStackTrace();
+                System.out.println("Message Exception");
             }
             return mimeMessage;
         };
