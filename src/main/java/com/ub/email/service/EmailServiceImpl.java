@@ -6,7 +6,6 @@ import com.ub.email.entity.User;
 import com.ub.email.repository.EmailTemplateRepository;
 import com.ub.email.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -83,12 +82,23 @@ public class EmailServiceImpl implements EmailService {
                 helper.setFrom("amit@localhost");
                 helper.setTo(user.getEmailId());
                 helper.setSubject(emailTemplate.getSubject());
-                String hrefLink = emailTemplate.getBody() + "<br/><br/><a href=http://localhost:8080/click/" + uuid + "> Click here for more details</a>";
-                helper.setText(hrefLink, true);
+                String mailBody = prepareMailBody(emailTemplate, uuid);
+                helper.setText(mailBody, true);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
             return mimeMessage;
         };
+    }
+
+    private String prepareMailBody(EmailTemplate emailTemplate, String uuid) {
+        StringBuilder mailBuilder = new StringBuilder();
+        mailBuilder.append("<img src=http://localhost:8080/offer/")
+                .append(uuid).append("/> <br/><br/>")
+                .append(emailTemplate.getBody())
+                .append("<br/><br/><a href=http://localhost:8080/click/")
+                .append(uuid)
+                .append("> Click here for more details</a>");
+        return mailBuilder.toString();
     }
 }

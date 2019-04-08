@@ -25,8 +25,15 @@ public class LinkController {
     StatsService statsService;
 
     @ResponseBody
-    @RequestMapping(value = "/offer", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getOffer() throws IOException {
+    @RequestMapping(value = "/offer/{uuid}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getOffer(@PathVariable("uuid") String uuid) throws IOException {
+        EmailStats stats = emailStatsRepository.findByUuid(uuid);
+        if (null != stats) {
+            stats.incrementTotalOpened();
+            emailStatsRepository.save(stats);
+            statsService.pushStats(uuid);
+            statsService.pushAllStats();
+        }
         InputStream in = applicationContext.getResource("classpath:assets/offer.png").getInputStream();
         return IOUtils.toByteArray(in);
     }
@@ -34,9 +41,11 @@ public class LinkController {
     @RequestMapping(value = "/click/{uuid}", method = RequestMethod.GET)
     public void click(@PathVariable("uuid") String uuid) {
         EmailStats stats = emailStatsRepository.findByUuid(uuid);
-        stats.incrementTotalClicked();
-        emailStatsRepository.save(stats);
-        statsService.pushStats(uuid);
-        statsService.pushAllStats();
+        if (null != stats) {
+            stats.incrementTotalClicked();
+            emailStatsRepository.save(stats);
+            statsService.pushStats(uuid);
+            statsService.pushAllStats();
+        }
     }
 }

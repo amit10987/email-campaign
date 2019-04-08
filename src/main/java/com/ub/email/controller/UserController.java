@@ -1,8 +1,6 @@
 package com.ub.email.controller;
 
-import com.ub.email.entity.Campaign;
 import com.ub.email.entity.User;
-import com.ub.email.repository.CampaignRepository;
 import com.ub.email.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

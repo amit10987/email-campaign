@@ -102,4 +102,8 @@ public class EmailStats {
     public void incrementTotalClicked() {
         totalClicked++;
     }
+
+    public void incrementTotalOpened() {
+        totalOpened++;
+    }
 }
